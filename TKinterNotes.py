@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import filedialog
 from PIL import ImageTk, Image
 from tkinter import messagebox
 
@@ -62,13 +63,31 @@ exit.pack()
 
 def popup():
     # showinfo(), showwarning(), showerror, askquestion, askokcancel, askyesno
-    messagebox.showinfo("This is my popup", "hello")
+    response = messagebox.showinfo("This is my popup", "hello")
+    Label(root, text=response).pack()
     
 Button(root, text="Popup", command=popup).pack()
+
+def open():
+    top = Toplevel()
+    lbl = Label(top, text="hello").pack()
+    myImg = ImageTk.PhotoImage(Image.open("python_icon.png"))
+    image_label2 = Label(top, image=myImg)
+    image_label2.pack(padx=10,pady=10)
+    close_btn = Button(top, text="Close", command=top.destroy)
+    close_btn.pack()
+    root.filename = filedialog.askopenfilename(initialdir="/Desktop", title="Select a file", filetypes=(("png files", "*.png"), ("all files", "*.*")))
+    lbl = Label(top, text=root.filename).pack()
+    myImg = ImageTk.PhotoImage(Image.open(root.filename))
+    img_lbl = Label(top, image=myImg)
+    img_lbl.pack()
+
+open_btn = Button(root, text="Open second window", command=open).pack()
 
 # TODO 
 # back() forward() buttons
 # Button(root, text="", command=Lambda: forward/back())
+
 
 
 root.mainloop()
