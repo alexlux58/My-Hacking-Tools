@@ -6,7 +6,7 @@ from tkinter import messagebox
 root = Tk()
 root.title("Learning TKinter")
 root.iconbitmap('python_icon.ico')
-
+root.geometry("800x800")
 
 frame = LabelFrame(root, text="This is my frame", padx=5, pady=5)
 frame.pack(padx=10,pady=10)
@@ -88,6 +88,16 @@ open_btn = Button(root, text="Open second window", command=open).pack()
 # back() forward() buttons
 # Button(root, text="", command=Lambda: forward/back())
 
+vertical = Scale(root, from_=0, to=200)
+vertical.pack()
 
+horizontal = Scale(root, from_=0, to=200, orient=HORIZONTAL)
+horizontal.pack()
+
+def slide():
+    my_label = Label(root, text=horizontal.get()).pack()
+    my_label = Label(root, text=vertical.get()).pack()
+    
+my_btn = Button(root, text="slide value", command=slide).pack()
 
 root.mainloop()
