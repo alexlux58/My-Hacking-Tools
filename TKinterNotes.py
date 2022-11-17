@@ -100,4 +100,20 @@ def slide():
     
 my_btn = Button(root, text="slide value", command=slide).pack()
 
+var = StringVar()
+c_b = Checkbutton(root, text="Check this box", variable=var, onvalue="On", offvalue="Off")
+c_b.deselect()
+c_b.pack()
+
+def show(v):
+    myLabel = Label(root, text=v.get()).pack()
+    
+showbtn = Button(root, text="Show", command=show).pack()
+
+clicked = StringVar()
+clicked.set("Monday")
+
+drop = OptionMenu(root, clicked, "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")
+drop.pack()
+
 root.mainloop()
