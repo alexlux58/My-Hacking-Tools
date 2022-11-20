@@ -98,7 +98,7 @@ def query():
         print_records += str(record) + "\n"
     
     query_label = Label(root, text=print_records)
-    query_label.grid(row=8, column=0, columnspan=2)
+    query_label.grid(row=11, column=0, columnspan=2)
     conn.commit()
     conn.close()
 
@@ -108,17 +108,17 @@ submt_btn.grid(row=6, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
 query_btn = Button(root, text="Show Records", command=query)
 query_btn.grid(row=7, column=0, columnspan=2, pady=10, padx=10, ipadx=137)
 
-def delete(name):
+def delete():
     conn = sqlite3.connect('address_book.db')
     cursr = conn.cursor()
-    cursr.execute(f"DELETE FROM addresses WHERE first_name='{name}'")
+    cursr.execute("DELETE FROM addresses WHERE oid=" + entry.get())
     conn.commit()
     conn.close()
     
 entry = Entry(root, width=50)
 entry.grid(row=8, column=0, columnspan=2, pady=10, padx=10, ipadx=137)
     
-delete_btn = Button(root, text="Delete", command=delete(entry.get()))
+delete_btn = Button(root, text="Delete", command=delete)
 delete_btn.grid(row=9, column=0, columnspan=2, pady=10, padx=10, ipadx=137)
 
 root.mainloop()
