@@ -130,12 +130,21 @@ EXAMPLES:
   nmap -v -sn 192.168.0.0/16 10.0.0.0/8
   nmap -v -iR 10000 -Pn -p 80
                             '''
+                            
+essential_commands_text = '''
+Basic Nmap Scan (nmap <IP>)
+OS Enumeration (nmap <IP> -O)
+Scan all TCP ports (nmap <IP> -p-)
+Default scripts (nmap <IP> -sC)
+All Scans with Verbose explenation (nmap -vv -A <IP>)
+'''
 
 from tkinter import *
 from tkinter import scrolledtext
+import nmap
 
 class Window:
-    def __init__(self, title, icon="images/icon.ico", geometry="700x700"):
+    def __init__(self, title, icon="images/icon.ico", geometry="1100x1100"):
         
         self.tk = Tk()
         self.tk.title(title)
@@ -145,14 +154,19 @@ class Window:
         self.tk.bind("<F11>", self.toggle_fullscreen)
         self.tk.bind("<Escape>", self.end_fullscreen)
         
-        self.module_description_frame = LabelFrame(self.tk, text="Module Description", padx=25, pady=5,font = ("Times New Roman", 16), background = 'white', foreground = "black")
-        self.module_description_frame.grid()
+        self.module_description_frame = LabelFrame(self.tk, text="Module Description", padx=5, pady=5,font = ("Times New Roman", 16), background = 'white', foreground = "black")
+        self.module_description_frame.grid(row=0, column=0, columnspan=2)
 
         self.decription_text = scrolledtext.ScrolledText(self.module_description_frame, wrap = WORD, width=60, height=50, font = ("Times New Roman", 12))
         self.decription_text.grid(pady=10, padx=10)
         print(network_scan_description)
         self.decription_text.insert(INSERT, network_scan_description)
         self.decription_text.focus()
+        
+        self.network_scan_button = Button(self.tk, text="Network Scan", padx=50, pady=50, command=self.ScanWindow, fg="black", bg="white")
+        self.network_scan_button.grid(row=0, column=3, columnspan=2, padx=50, pady=50)
+        
+        self.scanner = nmap.PortScanner()
     
     def toggle_fullscreen(self, event=None):
         self.state = not self.state  # Just toggling the boolean
@@ -163,10 +177,38 @@ class Window:
         self.state = False
         self.tk.attributes("-fullscreen", self.state)
         return "break"
+    
+    def ScanWindow(self):
+        self.scan_window = Toplevel()
+        self.scan_window.geometry("600x600")
+        self.IP_entry = Entry(self.scan_window, width=50)
+        self.IP_entry.grid(row=0, column=0, columnspan=2, pady=10)
+        # self.IP_entry.insert(0, "Target IP: ")
+        self.basic_scan_button = Button(self.scan_window, text="Basic Scan", pady=10, command=self.basic_scan, fg="black", bg="blue")
+        self.basic_scan_button.grid(row=1, column=0, columnspan=1)
+        self.essential_commands_frame = LabelFrame(self.scan_window, text="Essential Commands", padx=5, pady=5,font = ("Times New Roman", 16), background = 'white', foreground = "black")
+        self.essential_commands_frame.grid(row=2, column=0, columnspan=2)
+        self.decription_text = Text(self.essential_commands_frame, wrap = WORD, width=60, height=50, font = ("Times New Roman", 12))
+        self.decription_text.grid(row=3, column=0, columnspan=2, pady=10)
+        self.decription_text.insert(INSERT, essential_commands_text)
+        self.decription_text.focus()
+        
+    def basic_scan(self):
+        print(type(self.IP_entry.get()))
+        print("Nmap Version: ", self.scanner.nmap_version())
+        self.scanner.scan(self.IP_entry.get(), "1-1024", "-v")
+        print(self.scanner.scaninfo())
+        print("IP Status: ", self.scanner[self.IP_entry.get()].state())
+        print(self.scanner[self.IP_entry.get()].all_protocols())
+        print("Open Ports: ", self.scanner[self.IP_entry.get()]["tcp"].keys())
+        
+        
+    def OS_enumeration(self):
+        pass
+        
 
 if __name__ == "__main__":
     root = Window(title="Command Center")
-    root.tk.attributes("-fullscreen", True)
     root.tk.mainloop()
 
 
