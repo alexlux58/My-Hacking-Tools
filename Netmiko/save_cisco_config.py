@@ -32,7 +32,7 @@ network_device = {
 }
 
 connect = ConnectHandler(**network_device)
-
+# Call 'enable()' method to elevate privileges
 connect.enable()
 
 sh_env_all = "sh env all"
