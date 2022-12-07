@@ -15,8 +15,22 @@ network_device = {
     "secret": f"{secret}",
 }
 
+first_port = 1
+last_port = 5
+
 connect_to_device = ConnectHandler(**network_device)
 connect_to_device.enable()
 list_of_commands = ["interface gi 1/0/1", "shut", "end"]
+to_execute = connect_to_device.send_command("sh interface gi 1/0/1 status")
+print(to_execute)
 to_execute = connect_to_device.send_config_set(list_of_commands)
+print(to_execute)
+to_execute = connect_to_device.send_command("sh interface gi 1/0/1 status")
+print(to_execute)
+
+for port in range(first_port, last_port+1):
+    list_of_commands = ["interface gi 1/0/" + str(port), "shut"]
+    to_execute = connect_to_device.send_config_set(list_of_commands)
+    
+to_execute = connect_to_device.send_command("sh ip interface brief")
 print(to_execute)
