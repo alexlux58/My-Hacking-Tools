@@ -34,4 +34,6 @@ for i in range(int(first_host), int(last_host)):
             print("HOST IS UP")
     except:
         print("HOST IS DOWN")
-        
+    
+    empty_string = ""
+print("completed")
